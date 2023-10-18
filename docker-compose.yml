@@ -6,8 +6,8 @@ services:
       - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=booking
-      - POSTGRES_USER=ivan
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=yesterz
+      - POSTGRES_PASSWORD=yesterz123!
   web:
     build: ./Booking_Service/
     command:  python3.9 ./manage.py runserver 0.0.0.0:8001
@@ -15,3 +15,24 @@ services:
       - ./Booking_Service/:/usr/src/Booking_Service
     ports:
       - '8001:8001'
+  hotel:
+    build: ./Hotel_Service/
+    command:  python3.9 ./manage.py runserver 0.0.0.0:8002
+    volumes:
+      - ./Hotel_Service/:/usr/src/Hotel_Service
+    ports:
+      - '8002:8002'
+  session:
+    build: ./Session_Service/
+    command:  python3.9 ./manage.py runserver 0.0.0.0:8003
+    volumes:
+      - ./Session_Service/:/usr/src/Session_Service
+    ports:
+      - '8003:8003'
+  gateway:
+    build: ./Session_Service/
+    command:  python3.9 ./manage.py runserver 0.0.0.0:8004
+    volumes:
+      - ./Session_Service/:/usr/src/Session_Service
+    ports:
+      - '8004:8004'
