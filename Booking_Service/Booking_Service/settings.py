@@ -27,7 +27,7 @@ JWT_KEY = 'django-insecure-0em@nl6y-bw)fmz*%2o!gr-b8c3%gata45=w_wg0p01qjp=j#7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'Booking_Service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd7vqggu3o5nnhu',
-        'USER': 'tsrzxcplqfcwdt',
-        'PASSWORD': 'faaa53b419c23a682eb9531d07756903a52d71957ad178518c25f916f7eb4fae',
-        'HOST': 'ec2-108-128-104-50.eu-west-1.compute.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('DB_ENGINE'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
