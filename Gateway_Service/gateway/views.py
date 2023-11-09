@@ -547,8 +547,12 @@ def index(request):
 
     if len(_allhotels) != 0:
         title = "호텔 목록"
-        paginator = Paginator(_allhotels, 10)
         page_number = request.GET.get('page')
+        if page_number and page_number.isdigit():
+            page_number = int(page_number)
+        else:
+            page_number = 1 
+        paginator = Paginator(_allhotels, 10)
         page_obj = paginator.get_page(page_number)
         response = render(request, 'index.html', {'allhotels': _allhotels, 'cities': cities, 'page_obj': page_obj,
                                                   'title': title, 'user': data})
