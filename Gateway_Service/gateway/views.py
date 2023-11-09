@@ -8,7 +8,7 @@ from circuitbreaker import circuit
 from rest_framework.decorators import api_view
 from Gateway_Service.settings import JWT_KEY
 from .forms import LoginForm, UserRegistrationForm, NewHotel, DeleteHotel, CommentForm
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from rest_framework import status
 from confluent_kafka import Producer
 from datetime import datetime as dt
@@ -1167,6 +1167,7 @@ def cookies(request):
         elif session.status_code == 401:
             pass
         else:
+            response = HttpResponse()
             request.delete_cookie('jwt')
     else:
         is_authenticated = True
