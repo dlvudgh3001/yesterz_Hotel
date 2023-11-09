@@ -1160,15 +1160,17 @@ def auth(request):
 def cookies(request):
     is_authenticated = False
     session = requests.get(f"http://{HOST_ADDRESS}:8001/api/v1/session/validate", cookies=request.COOKIES)
+    
+    response = HttpResponse()
+
     if session.status_code != 200:
         if session.status_code == 403:
             session = requests.get(f"http://{HOST_ADDRESS}:8001/api/v1/session/refresh", cookies=request.COOKIES)
             is_authenticated = True
         elif session.status_code == 401:
-            pass
-        else:
-            response = HttpResponse()
             request.delete_cookie('jwt')
+        else:
+            pass
     else:
         is_authenticated = True
     return is_authenticated, request, session
