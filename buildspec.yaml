@@ -13,7 +13,7 @@ env:
     variables:
         AWS_REGION: "ap-northeast-2"
         ECR_REPO_URI: "686266755470.dkr.ecr.ap-northeast-2.amazonaws.com/yesterz-service"
-        IMAGE_VERSION: "1.04"
+        IMAGE_VERSION: "1.06"
         
 phases:
   install:
