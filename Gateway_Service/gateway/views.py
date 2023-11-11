@@ -135,7 +135,7 @@ def users(request):
             session = requests.get(f"http://{SESSION_API_SERVICE_HOST}:8001/api/v1/session/refresh", cookies=request.COOKIES)
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
-    _users = requests.get(f"http://{SESSION_API_SERVICE_HOST}:8001/api/v1/session/users", cookies=session.cookies)
+    _users = requests.get(f"http://{HOST_ADDRESS}:8001/api/v1/session/users", cookies=session.cookies)
     if _users.status_code != 200:
         return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     response = JsonResponse(_users.json(), status=status.HTTP_200_OK, safe=False)
@@ -161,7 +161,7 @@ def add_hotel(request):
             session = requests.get(f"http://{SESSION_API_SERVICE_HOST}:8001/api/v1/session/refresh", cookies=request.COOKIES)
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
-    hotel = requests.post(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/", json=request.data, cookies=session.cookies)
+    hotel = requests.post(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/", json=request.data, cookies=session.cookies)
     if hotel.status_code != 200:
         return JsonResponse(hotel.json(), status=status.HTTP_400_BAD_REQUEST)
     response = JsonResponse(hotel.json(), status=status.HTTP_200_OK, safe=False)
@@ -181,7 +181,7 @@ def all_hotels(request):
             session = requests.get(f"http://{SESSION_API_SERVICE_HOST}:8001/api/v1/session/refresh", cookies=request.COOKIES)
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
-    hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels", json=request.data, cookies=session.cookies)
+    hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels", json=request.data, cookies=session.cookies)
     if hotel.status_code != 200:
         return JsonResponse(hotel.json(), status=status.HTTP_400_BAD_REQUEST)
     response = JsonResponse(hotel.json(), status=status.HTTP_200_OK, safe=False)
@@ -202,10 +202,10 @@ def one_hotel_or_delete(request, hotel_uid):
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
-        hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{hotel_uid}", json=request.data, cookies=session.cookies)
+        hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{hotel_uid}", json=request.data, cookies=session.cookies)
         response = JsonResponse(hotel.json(), status=status.HTTP_200_OK, safe=False)
     else:  # DELETE
-        hotel = requests.delete(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{hotel_uid}", json=request.data, cookies=session.cookies)
+        hotel = requests.delete(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{hotel_uid}", json=request.data, cookies=session.cookies)
         response = JsonResponse({'detail': 'success deleted'}, status=status.HTTP_204_NO_CONTENT, safe=False)
     if hotel.status_code != 200 and hotel.status_code != 204:
         return JsonResponse(hotel.json(), status=status.HTTP_400_BAD_REQUEST)
@@ -232,26 +232,26 @@ def create_booking_or_all(request):
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
-        booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/", cookies=session.cookies)
+        booking = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/", cookies=session.cookies)
         if booking.status_code != 200:
             return JsonResponse(booking.json(), status=status.HTTP_400_BAD_REQUEST)
     else:  # POST
         # узнаем цену отеля
-        hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{request.data['hotel_uid']}", json=request.data, cookies=session.cookies)
+        hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{request.data['hotel_uid']}", json=request.data, cookies=session.cookies)
         if hotel.status_code != 200:
             return JsonResponse(hotel.json(), status=status.HTTP_400_BAD_REQUEST)
         hotel = hotel.json()
         request.data.update({"price": hotel["cost"]})
         #  создаем бронь
-        booking = requests.post(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/", json=request.data, cookies=session.cookies)
+        booking = requests.post(f"http://{HOST_ADDRESS}:8003/api/v1/booking/", json=request.data, cookies=session.cookies)
         if booking.status_code != 200:
             return JsonResponse(booking.json(), status=status.HTTP_400_BAD_REQUEST)
         #  подсчитываем количество броней для определения нужно ли повышать лояльность или нет
-        booking_all = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/", cookies=session.cookies)
+        booking_all = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/", cookies=session.cookies)
         if booking_all.status_code != 200:
             return JsonResponse(booking_all.json(), status=status.HTTP_400_BAD_REQUEST)
         len_booking = booking_all.json()
-        l_status = requests.get(f"http://{LOYALTY_API_SERVICE_HOST}:8000/api/v1/loyalty/balance", cookies=session.cookies)
+        l_status = requests.get(f"http://{HOST_ADDRESS}:8000/api/v1/loyalty/balance", cookies=session.cookies)
         if l_status.status_code != 200:
             return JsonResponse(l_status.json(), status=status.HTTP_400_BAD_REQUEST)
         l_status = l_status.json()['status_loyalty']
@@ -313,7 +313,7 @@ def one_booking(request, booking_uid):
             session = requests.get(f"http://{SESSION_API_SERVICE_HOST}:8001/api/v1/session/refresh", cookies=request.COOKIES)
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
-    booking_one = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies)
+    booking_one = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies)
     if booking_one.status_code != 200:
         return JsonResponse(booking_one.json(), status=status.HTTP_400_BAD_REQUEST)
     response = JsonResponse(booking_one.json(), status=status.HTTP_200_OK, safe=False)
@@ -419,7 +419,7 @@ def report_booking(request):
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     # достаем отчет по бронированию
-    report = requests.get(f"http://{REPORT_API_SERVICE_HOST}:8006/api/v1/reports/booking", cookies=session.cookies)
+    report = requests.get(f"http://{HOST_ADDRESS}:8006/api/v1/reports/booking", cookies=session.cookies)
     if report.status_code == 200:
         report = report.content.decode('utf8').replace("'", '"')
         report = json.loads(report)
@@ -440,7 +440,7 @@ def report_user(request):
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     # достаем отчет по пользователям: логирование, разлогирование, регистрация
-    report = requests.get(f"http://{REPORT_API_SERVICE_HOST}:8006/api/v1/reports/users", cookies=session.cookies)
+    report = requests.get(f"http://{HOST_ADDRESS}:8006/api/v1/reports/users", cookies=session.cookies)
     if report.status_code == 200:
         report = report.content.decode('utf8').replace("'", '"')
         report = json.loads(report)
@@ -461,7 +461,7 @@ def report_hotels(request):
         else:
             return JsonResponse({"error": "Internal error"}, status=status.HTTP_400_BAD_REQUEST)
     # достаем отчет по пользователям: логирование, разлогирование, регистрация
-    report = requests.get(f"http://{REPORT_API_SERVICE_HOST}:8006/api/v1/reports/hotels", cookies=session.cookies)
+    report = requests.get(f"http://{HOST_ADDRESS}:8006/api/v1/reports/hotels", cookies=session.cookies)
     if report.status_code == 200:
         report = report.content.decode('utf8').replace("'", '"')
         report = json.loads(report)
@@ -671,9 +671,9 @@ def booking_info(request, booking_uid):
     data = auth(request)
     cities = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/cities").json()
     try:
-        booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies).json()
-        hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
-        payment = requests.get(f"http://{PAYMENT_API_SERVICE_HOST}:8002/api/v1/payment/status/{booking['payment_uid']}", cookies=session.cookies).json()
+        booking = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies).json()
+        hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
+        payment = requests.get(f"http://{HOST_ADDRESS}:8002/api/v1/payment/status/{booking['payment_uid']}", cookies=session.cookies).json()
         date_start = datetime.datetime.strptime(booking['date_start'], "%Y-%m-%d")
         date_end = datetime.datetime.strptime(booking['date_end'], "%Y-%m-%d")
         period = date_end - date_start
@@ -682,7 +682,7 @@ def booking_info(request, booking_uid):
                           {'booking': booking, 'hotel': hotel, 'payment': payment, 'cities': cities, 'user': data,
                            'totalcost': totalcost})
     except:
-        bookerror = "Failed to display booking, try again"
+        bookerror = "예약을 표시하지 못했습니다. 다시 시도하십시오"
         response = render(request, 'user_booking.html', {'bookerror': bookerror, 'cities': cities, 'user': data})
     response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True) \
         if is_authenticated else response.delete_cookie('jwt')
@@ -694,14 +694,14 @@ def pay_room(request, payment_uid):
     data = auth(request)
     cities = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/cities").json()
     if request.method == 'POST':
-        booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/{request.POST['booking_uid']}", cookies=session.cookies).json()
-        hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
-        payment = requests.get(f"http://{PAYMENT_API_SERVICE_HOST}:8002/api/v1/payment/status/{booking['payment_uid']}", cookies=session.cookies).json()
+        booking = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/{request.POST['booking_uid']}", cookies=session.cookies).json()
+        hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
+        payment = requests.get(f"http://{HOST_ADDRESS}:8002/api/v1/payment/status/{booking['payment_uid']}", cookies=session.cookies).json()
         date_start = datetime.datetime.strptime(booking['date_start'], "%Y-%m-%d")
         date_end = datetime.datetime.strptime(booking['date_end'], "%Y-%m-%d")
         period = date_end - date_start
         totalcost = int(hotel['cost']) * (period.days)
-        filter_booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/date/{booking['date_start']}/{booking['date_end']}", cookies=session.cookies).json()
+        filter_booking = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/date/{booking['date_start']}/{booking['date_end']}", cookies=session.cookies).json()
         print(len(filter_booking))
         if len(filter_booking) >= 3:
             error = "예약이 마감되었습니다."
@@ -713,11 +713,11 @@ def pay_room(request, payment_uid):
         if pay.status_code == 200:
             response = HttpResponseRedirect('/booking_info/{}'.format(request.POST['booking_uid']))
             #  подсчитываем количество броней для определения нужно ли повышать лояльность или нет
-            booking_all = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/", cookies=session.cookies)
+            booking_all = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/", cookies=session.cookies)
             if booking_all.status_code != 200:
                 return JsonResponse(booking_all.json(), status=status.HTTP_400_BAD_REQUEST)
             len_booking = booking_all.json()
-            l_status = requests.get(f"http://{LOYALTY_API_SERVICE_HOST}:8000/api/v1/loyalty/balance", cookies=session.cookies)
+            l_status = requests.get(f"http://{HOST_ADDRESS}:8000/api/v1/loyalty/balance", cookies=session.cookies)
             if l_status.status_code != 200:
                 return JsonResponse(l_status.json(), status=status.HTTP_400_BAD_REQUEST)
             l_status = l_status.json()['status_loyalty']
@@ -768,8 +768,8 @@ def del_booking(request, booking_uid):
                 response = render(request, 'user_booking.html', {'booking': book, 'cities': cities, 'hotel': hot,
                                                                  'payment': pay, 'error': error, 'user': data})
         else:
-            booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies).json()
-            hotel = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
+            booking = requests.get(f"http://{HOST_ADDRESS}:8003/api/v1/booking/{booking_uid}", cookies=session.cookies).json()
+            hotel = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{booking['hotel_uid']}", cookies=session.cookies).json()
             date_start = datetime.datetime.strptime(booking['date_start'], "%Y-%m-%d")
             date_end = datetime.datetime.strptime(booking['date_end'], "%Y-%m-%d")
             period = date_end - date_start
@@ -879,7 +879,7 @@ def static_booking(request):
         response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True)
         return response
 
-    report = requests.get(f"http://{REPORT_API_SERVICE_HOST}:8006/api/v1/reports/booking", cookies=session.cookies)
+    report = requests.get(f"http://{HOST_ADDRESS}:8006/api/v1/reports/booking", cookies=session.cookies)
     if report.status_code == 200:
         report = report.content.decode('utf8').replace("'", '"')
         report = json.loads(report)
@@ -1070,21 +1070,21 @@ def balance(request):
         sort = sorted(_allbook, key=lambda x: (x['date_create'], x['date_end']), reverse=True)
         curr, hist, currhotel, histhotel, currpay, histpay = (list() for _ in range(6))
         for s in sort:
-            payment = requests.get(f"http://{PAYMENT_API_SERVICE_HOST}:8002/api/v1/payment/status/{s['payment_uid']}", cookies=session.cookies).json()
+            payment = requests.get(f"http://{HOST_ADDRESS}:8002/api/v1/payment/status/{s['payment_uid']}", cookies=session.cookies).json()
             if datetime.datetime.strptime(s['date_end'], "%Y-%m-%d") > datetime.datetime.now() \
                     and payment['status'] == 'NEW':
-                ch = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
+                ch = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
                 curr.append(s)
                 currhotel.append(ch)
                 currpay.append(payment)
             elif datetime.datetime.strptime(s['date_end'], "%Y-%m-%d") > datetime.datetime.now() \
                     and payment['status'] == 'PAID':
-                ch = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
+                ch = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
                 curr.append(s)
                 currhotel.append(ch)
                 currpay.append(payment)
             else:
-                hh = requests.get(f"http://{HOTEL_API_SERVICE_HOST}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
+                hh = requests.get(f"http://{HOST_ADDRESS}:8004/api/v1/hotels/{s['hotel_uid']}", cookies=session.cookies).json()
                 hist.append(s)
                 histhotel.append(hh)
                 histpay.append(payment)
