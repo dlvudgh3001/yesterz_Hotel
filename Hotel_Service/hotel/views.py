@@ -18,7 +18,15 @@ FAILURES = 3
 TIMEOUT = 6
 
 HOST_ADDRESS = os.environ.get('HOST_ADDRESS')
-SERVICE_IP = os.environ.get('SERVICE_IP')
+SESSION_API_SERVICE_HOST = os.environ.get('SESSION_API_SERVICE_HOST')
+HOTEL_API_SERVICE_HOST = os.environ.get('HOTEL_API_SERVICE_HOST')
+BOOKING_API_SERVICE_HOST = os.environ.get('BOOKING_API_SERVICE_HOST')
+LOYALTY_API_SERVICE_HOST = os.environ.get('LOYALTY_API_SERVICE_HOST')
+PAYMENT_API_SERVICE_HOST = os.environ.get('PAYMENT_API_SERVICE_HOST')
+REPORT_API_SERVICE_HOST = os.environ.get('REPORT_API_SERVICE_HOST')
+RATING_API_SERVICE_HOST = os.environ.get('RATING_API_SERVICE_HOST')
+GATEWAY_API_SERVICE_HOST = os.environ.get('GATEWAY_API_SERVICE_HOST')
+
 
 
 # API
@@ -36,10 +44,10 @@ def about_or_delete(request, hotel_uid):
             data = auth(request)
             if 'admin' not in data['role']:
                 return JsonResponse({'detail': 'You are not admin!'}, status=status.HTTP_400_BAD_REQUEST)
-            hotel_likes = requests.delete(f"http://{RATING_IP}:8007/api/v1/rating/delete_hotel",
+            hotel_likes = requests.delete(f"http://{RATING_API_SERVICE_HOST}:8007/api/v1/rating/delete_hotel",
                                json={'hotel_uid': hotel_uid},
                                cookies=request.COOKIES)
-            hotel_comments = requests.delete(f"http://{RATING_IP}:8007/api/v1/rating/delete_all_comments",
+            hotel_comments = requests.delete(f"http://{RATING_API_SERVICE_HOST}:8007/api/v1/rating/delete_all_comments",
                                json={'hotel_uid': hotel_uid},
                                cookies=request.COOKIES)
             if hotel_comments.status_code != 204:
@@ -86,7 +94,7 @@ def all_hotels_or_add_hotel(request):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             hotel = model_to_dict(Hotels.objects.latest('id'))
-            hotel_likes = requests.post(f"http://{RATING_IP}:8007/api/v1/rating/create_hotel",
+            hotel_likes = requests.post(f"http://{RATING_API_SERVICE_HOST}:8007/api/v1/rating/create_hotel",
                                json={"hotel_uid": str(hotel['hotel_uid'])},
                                cookies=request.COOKIES)
             if hotel_likes.status_code != 201:
@@ -120,7 +128,7 @@ def filter_date(request):
     """
     try:
         if "date_start" and "date_end" in request.data.keys():
-            filter_booking = requests.get(f"http://{BOOKING_IP}:8003/api/v1/booking/date/{{}}/{{}}".
+            filter_booking = requests.get(f"http://{BOOKING_API_SERVICE_HOST}:8003/api/v1/booking/date/{{}}/{{}}".
                                           format(request.data["date_start"], request.data["date_end"]),
                                           cookies=request.COOKIES)
             if filter_booking.status_code == 204:

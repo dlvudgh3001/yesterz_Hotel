@@ -15,7 +15,16 @@ FAILURES = 3
 TIMEOUT = 6
 
 HOST_ADDRESS = os.environ.get('HOST_ADDRESS')
-SERVICE_IP = os.environ.get('SERVICE_IP')
+SESSION_API_SERVICE_HOST = os.environ.get('SESSION_API_SERVICE_HOST')
+HOTEL_API_SERVICE_HOST = os.environ.get('HOTEL_API_SERVICE_HOST')
+BOOKING_API_SERVICE_HOST = os.environ.get('BOOKING_API_SERVICE_HOST')
+LOYALTY_API_SERVICE_HOST = os.environ.get('LOYALTY_API_SERVICE_HOST')
+PAYMENT_API_SERVICE_HOST = os.environ.get('PAYMENT_API_SERVICE_HOST')
+REPORT_API_SERVICE_HOST = os.environ.get('REPORT_API_SERVICE_HOST')
+RATING_API_SERVICE_HOST = os.environ.get('RATING_API_SERVICE_HOST')
+GATEWAY_API_SERVICE_HOST = os.environ.get('GATEWAY_API_SERVICE_HOST')
+
+
 
 # Kafka
 conf = {
@@ -76,7 +85,7 @@ def report_by_hotels(request):
     """
     try:
         auth(request)
-        hotels = requests.get(f"http://{HOST_ADDRESS}:8005/api/v1/booking/static", cookies=request.COOKIES)
+        hotels = requests.get(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/booking/static", cookies=request.COOKIES)
         if hotels.status_code == 200:
             hotels = hotels.content.decode('utf8').replace("'", '"')
             hotels = json.loads(hotels)
