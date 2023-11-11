@@ -9,10 +9,11 @@ env:
         DB_PASSWORD: "DB_PASSWORD"
         DB_HOST: "DB_HOST"
         HOST_ADDRESS: "HOST_ADDRESS"
+        SERVICE_IP: "SERVICE_IP"
     variables:
         AWS_REGION: "ap-northeast-2"
         ECR_REPO_URI: "686266755470.dkr.ecr.ap-northeast-2.amazonaws.com/yesterz-service"
-        IMAGE_VERSION: "1.03"
+        IMAGE_VERSION: "1.04"
         
 phases:
   install:
@@ -34,6 +35,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Gateway_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Gateway_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Gateway_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Gateway_Service/Dockerfile
       - docker build -t yesterz-gateway ./Gateway_Service
       - docker tag yesterz-gateway $ECR_REPO_URI:gateway-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:gateway-$IMAGE_VERSION
@@ -42,6 +44,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Booking_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Booking_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Booking_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Booking_Service/Dockerfile
       - docker build -t yesterz-booking ./Booking_Service
       - docker tag yesterz-booking $ECR_REPO_URI:booking-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:booking-$IMAGE_VERSION
@@ -50,6 +53,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Hotel_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Hotel_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Hotel_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Hotel_Service/Dockerfile
       - docker build -t yesterz-hotel ./Hotel_Service
       - docker tag yesterz-hotel $ECR_REPO_URI:hotel-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:hotel-$IMAGE_VERSION
@@ -58,6 +62,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Loyalty_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Loyalty_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Loyalty_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Loyalty_Service/Dockerfile
       - docker build -t yesterz-loyalty ./Loyalty_Service
       - docker tag yesterz-loyalty $ECR_REPO_URI:loyalty-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:loyalty-$IMAGE_VERSION
@@ -66,6 +71,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Payment_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Payment_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Payment_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Payment_Service/Dockerfile
       - docker build -t yesterz-payment ./Payment_Service
       - docker tag yesterz-payment $ECR_REPO_URI:payment-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:payment-$IMAGE_VERSION
@@ -74,6 +80,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Report_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Report_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Report_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Report_Service/Dockerfile
       - docker build -t yesterz-report ./Report_Service
       - docker tag yesterz-report $ECR_REPO_URI:report-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:report-$IMAGE_VERSION
@@ -82,6 +89,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Session_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Session_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Session_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Session_Service/Dockerfile
       - docker build -t yesterz-session ./Session_Service
       - docker tag yesterz-session $ECR_REPO_URI:session-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:session-$IMAGE_VERSION
@@ -90,6 +98,7 @@ phases:
       - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Rating_Service/Dockerfile
       - sed -i "s/change-db-host/$DB_HOST/g" ./Rating_Service/Dockerfile
       - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Rating_Service/Dockerfile
+      - sed -i "s/change-service-ip/$SERVICE_IP/g" ./Rating_Service/Dockerfile
       - docker build -t yesterz-rating ./Rating_Service
       - docker tag yesterz-rating $ECR_REPO_URI:rating-$IMAGE_VERSION
       - docker push $ECR_REPO_URI:rating-$IMAGE_VERSION
