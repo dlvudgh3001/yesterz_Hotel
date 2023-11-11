@@ -1093,7 +1093,7 @@ def balance(request):
         response = render(request, 'balance.html', {'loyalty': loyalty, 'user': user, 'currbookhot': currbookhot,
                                                     'cities': cities, 'histbookhot': histbookhot})
     except:
-        usererror = "Не удалось отобразить данные. Попробуйте позднее"
+        usererror = "데이터를 표시할 수 없습니다. 나중에 시도해 보세요."
         response = render(request, 'balance.html', {'user': data, 'cities': cities, 'usererror': usererror})
     response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True) \
         if is_authenticated else response.delete_cookie('jwt')
