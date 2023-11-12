@@ -580,7 +580,7 @@ def make_login(request):
         form = LoginForm()
     if request.method == "POST":
         form = LoginForm(data=request.POST)
-        session = requests.post(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/login",
+        session = requests.post(f"http://{HOST_ADDRESS}:8005/api/v1/login",
                                 json={"username": request.POST.get('username'),
                                       "password": request.POST.get('password')})
         if session.status_code == 200:
@@ -905,7 +905,7 @@ def delete_hotel_admin(request):
         form = DeleteHotel()
     if request.method == "POST":
         form = DeleteHotel(data=request.POST)
-        new_hotel = requests.delete(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/hotels/{form.data['hotel_uid']}",
+        new_hotel = requests.delete(f"http://{HOST_ADDRESS}:8005/api/v1/hotels/{form.data['hotel_uid']}",
                                     cookies=request.COOKIES)
         error = 'success'
         if new_hotel.status_code != 204:
@@ -928,7 +928,7 @@ def all_users(request):
         response = HttpResponseRedirect('/index')
         response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True)
         return response
-    _users = requests.get(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/users", cookies=request.COOKIES).json()
+    _users = requests.get(f"http://{HOST_ADDRESS}:8005/api/v1/users", cookies=request.COOKIES).json()
     response = render(request, 'all_users.html', {'all_users': _users, 'user': data})
     response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True) \
         if is_authenticated else response.delete_cookie('jwt')
@@ -943,7 +943,7 @@ def users_static(request):
         response.set_cookie(key='jwt', value=session.cookies.get('jwt'), httponly=True)
         return response
     try:
-        static_users = requests.get(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/reports/users", cookies=request.COOKIES).json()
+        static_users = requests.get(f"http://{HOST_ADDRESS}:8005/api/v1/reports/users", cookies=request.COOKIES).json()
         dictlist = list()
         for key, value in static_users.items():
             temp = [key, value]
@@ -1049,7 +1049,7 @@ def all_booking_static(request):
 
 
 def make_logout(request):
-    session = requests.get(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/logout", cookies=request.COOKIES)
+    session = requests.get(f"http://{HOST_ADDRESS}:8005/api/v1/logout", cookies=request.COOKIES)
     if session.status_code == 200:
         response = HttpResponseRedirect('/index')
         response.delete_cookie('jwt')
@@ -1118,7 +1118,7 @@ def registration(request):
         with open(f'gateway/static/images/avatars/{filename}', 'wb') as image:
             files = request.FILES["avatar"].read()
             image.write(files)
-        session = requests.post(f"http://{GATEWAY_API_SERVICE_HOST}:8005/api/v1/register",
+        session = requests.post(f"http://{HOST_ADDRESS}:8005/api/v1/register",
                                 json={"username": form.data['username'], "name": form.data['first_name'],
                                       "last_name": form.data['last_name'], "password": form.data['password'],
                                       "email": form.data['email'], "avatar": f'images/avatars/{filename}'})

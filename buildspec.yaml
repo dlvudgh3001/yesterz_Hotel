@@ -12,7 +12,7 @@ env:
     variables:
         AWS_REGION: "ap-northeast-2"
         ECR_REPO_URI: "686266755470.dkr.ecr.ap-northeast-2.amazonaws.com/yesterz-service"
-        IMAGE_VERSION: "1.11"
+        IMAGE_VERSION: "1.12"
         
 phases:
   install:
@@ -29,14 +29,14 @@ phases:
 
   build:
     commands:
-      # - sed -i "s/change-db-name/$DB_NAME/g" ./Gateway_Service/Dockerfile
-      # - sed -i "s/change-db-user/$DB_USER/g" ./Gateway_Service/Dockerfile
-      # - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Gateway_Service/Dockerfile
-      # - sed -i "s/change-db-host/$DB_HOST/g" ./Gateway_Service/Dockerfile
-      # - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Gateway_Service/Dockerfile
-      # - docker build -t yesterz-gateway ./Gateway_Service
-      # - docker tag yesterz-gateway $ECR_REPO_URI:gateway-$IMAGE_VERSION
-      # - docker push $ECR_REPO_URI:gateway-$IMAGE_VERSION
+      - sed -i "s/change-db-name/$DB_NAME/g" ./Gateway_Service/Dockerfile
+      - sed -i "s/change-db-user/$DB_USER/g" ./Gateway_Service/Dockerfile
+      - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Gateway_Service/Dockerfile
+      - sed -i "s/change-db-host/$DB_HOST/g" ./Gateway_Service/Dockerfile
+      - sed -i "s/change-host-address/$HOST_ADDRESS/g" ./Gateway_Service/Dockerfile
+      - docker build -t yesterz-gateway ./Gateway_Service
+      - docker tag yesterz-gateway $ECR_REPO_URI:gateway-$IMAGE_VERSION
+      - docker push $ECR_REPO_URI:gateway-$IMAGE_VERSION
       # - sed -i "s/change-db-name/$DB_NAME/g" ./Booking_Service/Dockerfile
       # - sed -i "s/change-db-user/$DB_USER/g" ./Booking_Service/Dockerfile
       # - sed -i "s/change-db-password/$DB_PASSWORD/g" ./Booking_Service/Dockerfile
