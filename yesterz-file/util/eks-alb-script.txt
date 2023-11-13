@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# create namespace
+#kubectl apply -f yesterz-namespace.yaml
+
+# change namespace yesterz-service
+#kubectl config set-context yesterz-context \
+#       --cluster Yesterz.ap-northeast-2.eksctl.io \
+#       --user aws-admin@Yesterz.ap-northeast-2.eksctl.io \
+#       --namespace yesterz-service
+
+#kubectl config use-context yesterz-context
+
+# create IAM OIDC Provider
+eksctl utils associate-iam-oidc-provider \
+        --region $AWS_DEFAULT_REGION \
+        --cluster Yesterz \
+        --approve
+# check IAM OIDC Provider
+aws iam list-open-id-connect-providers
+
+# create iam policy for lbcontroller
+aws iam create-policy \
+        --policy-name AWSLBControllerPolicy-yesterz \
+        --policy-document file://../util/iam_policy.json
+
+eksctl create iamserviceaccount \
+        --cluster Yesterz \
+        --namespace=kube-system \
+        --name=aws-load-balancer-controller \
+        --role-name AWSLBControllerPolicy-yesterz \
+        --attach-policy-arn=arn:aws:iam::686266755470:policy/AWSLBControllerPolicy-yesterz \
+        --approve
+
+# check create iam policy
+kubectl get serviceaccounts -n kube-system aws-load-balancer-controller -o yaml
+
+# install cert-manaer
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
+
+# deploy alb loadbalancer controller
+kubectl apply -f ../util/v2_4_7_full.yaml
+
+# check deploy alb loadbalancer controller
+kubectl get deployment -n kube-system aws-load-balancer-controller

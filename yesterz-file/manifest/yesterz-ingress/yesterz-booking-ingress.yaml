@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
+metadata:
+  name: "booking-ingress" 
+  namespace: yesterz-service
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=10800
+    alb.ingress.kubernetes.io/group.name: booking-ingress
+    alb.ingress.kubernetes.io/group.order: '11'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":8003}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/v1
+            pathType: Prefix 
+            backend:
+              service:
+                name: "booking-api" 
+                port:
+                  number: 8003

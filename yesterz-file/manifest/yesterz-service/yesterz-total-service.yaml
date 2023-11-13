@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service 
+metadata:
+ name: total-api
+ namespace: yesterz-service
+spec:
+ selector:
+  app: total-api
+ type: ClusterIP 
+ ports:
+  - name: loyalty-port
+    protocol: TCP 
+    port: 8000
+    targetPort: 8000
+  - name: session-port
+    protocol: TCP 
+    port: 8001
+    targetPort: 8001
+  - name: payment-port
+    protocol: TCP 
+    port: 8002
+    targetPort: 8002
+  - name: booking-port
+    protocol: TCP 
+    port: 8003
+    targetPort: 8003
+  - name: hotel-port
+    protocol: TCP 
+    port: 8004
+    targetPort: 8004
+  - name: report-port
+    protocol: TCP 
+    port: 8006
+    targetPort: 8006
+  - name: rating-port
+    protocol: TCP 
+    port: 8007
+    targetPort: 8007
