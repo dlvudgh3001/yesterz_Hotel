@@ -1,0 +1,137 @@
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
+metadata:
+  name: "gateway-ingress" 
+  namespace: yesterz-service
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: Pubilc1, Public2, Public3
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=10800
+    alb.ingress.kubernetes.io/group.name: gateway-ingress
+    alb.ingress.kubernetes.io/group.order: '10'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":8000},{"HTTP":8001},{"HTTP":8002},{"HTTP":8003},{"HTTP":8004},{"HTTP":8005},{"HTTP":8006},{"HTTP":8007},{"HTTP":443}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /index
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /signup
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /login
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /logout
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /balance
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /admin
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /static
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /add-hotel
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /delete-hotel
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /hotel_info
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /pay_room
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /search
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /all-users
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /add_booking
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /del_booking
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /booking_info
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005
+          - path: /all-booking-static
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 8005

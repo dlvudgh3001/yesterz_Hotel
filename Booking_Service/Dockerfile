@@ -21,6 +21,7 @@ ENV DB_USER=change-db-user
 ENV DB_PASSWORD=change-db-password
 ENV DB_HOST=change-db-host
 ENV HOST_ADDRESS=change-host-address
+
 ENV DB_PORT=5432
 
 # Expose the port the app runs on

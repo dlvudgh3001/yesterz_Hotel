@@ -1,0 +1,117 @@
+      env:
+        - name: LOYALTY_IP
+          value: "10.100.130.164"
+      env:
+        - name: SESSION_IP
+          value: "10.100.250.117"
+      env:
+        - name: PAYMENT_IP
+          value: "10.100.98.54"
+      env:
+        - name: BOOKING_IP
+          value: "10.100.83.13"
+      env:
+        - name: HOTEL_IP
+          value: "10.100.135.187"
+      env:
+        - name: GATEWAY_IP
+          value: "10.100.56.171"
+      env:
+        - name: REPORT_IP
+          value: "10.100.4.34"
+      env:
+        - name: RATING_IP
+          value: "10.100.120.186"
+          
+          
+          - path: /index
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /signup
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /login
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /logout
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /balance
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /admin
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /static
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /add-hotel
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /delete-hotel
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /hotel_info
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /pay_room
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /search
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80
+          - path: /all-users
+            pathType: Prefix 
+            backend:
+              service:
+                name: "gateway-api" 
+                port:
+                  number: 80

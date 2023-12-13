@@ -14,6 +14,14 @@ FAILURES = 3
 TIMEOUT = 6
 
 HOST_ADDRESS = os.environ.get('HOST_ADDRESS')
+SESSION_API_SERVICE_HOST = os.environ.get('SESSION_API_SERVICE_HOST')
+HOTEL_API_SERVICE_HOST = os.environ.get('HOTEL_API_SERVICE_HOST')
+BOOKING_API_SERVICE_HOST = os.environ.get('BOOKING_API_SERVICE_HOST')
+LOYALTY_API_SERVICE_HOST = os.environ.get('LOYALTY_API_SERVICE_HOST')
+PAYMENT_API_SERVICE_HOST = os.environ.get('PAYMENT_API_SERVICE_HOST')
+REPORT_API_SERVICE_HOST = os.environ.get('REPORT_API_SERVICE_HOST')
+RATING_API_SERVICE_HOST = os.environ.get('RATING_API_SERVICE_HOST')
+GATEWAY_API_SERVICE_HOST = os.environ.get('GATEWAY_API_SERVICE_HOST')
 
 
 # API
@@ -22,7 +30,7 @@ HOST_ADDRESS = os.environ.get('HOST_ADDRESS')
 def create(request):
     try:
         data = auth(request)
-        loyBalance = requests.get(f"http://{HOST_ADDRESS}:8000/api/v1/loyalty/balance", cookies=request.COOKIES)
+        loyBalance = requests.get(f"http://{LOYALTY_API_SERVICE_HOST}:8000/api/v1/loyalty/balance", cookies=request.COOKIES)
         if loyBalance.status_code != 200:
             return JsonResponse({'error': 'Error in loyalty'}, status=status.HTTP_400_BAD_REQUEST)
         loyBalance = loyBalance.json()
@@ -44,7 +52,7 @@ def pay(request, payment_uid):
         auth(request)
         payment = Payment.objects.get(payment_uid=payment_uid)
         payment.status = "PAID"
-        pay_loyalty = requests.patch(f"http://{HOST_ADDRESS}:8000/api/v1/loyalty/edit_balance",
+        pay_loyalty = requests.patch(f"http://{LOYALTY_API_SERVICE_HOST}:8000/api/v1/loyalty/edit_balance",
                                      json={'status': payment.status, 'price': request.data['price']},
                                      cookies=request.COOKIES)
         if pay_loyalty.status_code != 200:
@@ -62,7 +70,7 @@ def reversed(request, payment_uid):
         auth(request)
         payment = Payment.objects.get(payment_uid=payment_uid)
         payment.status = "REVERSED"
-        pay_loyalty = requests.patch(f"http://{HOST_ADDRESS}:8000/api/v1/loyalty/edit_balance",
+        pay_loyalty = requests.patch(f"http://{LOYALTY_API_SERVICE_HOST}:8000/api/v1/loyalty/edit_balance",
                                      json={'status': payment.status, 'price': request.data['price']},
                                      cookies=request.COOKIES)
         if pay_loyalty.status_code != 200:
